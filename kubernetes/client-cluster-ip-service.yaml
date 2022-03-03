@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-cluster-ip-service
+spec:
+  type: ClusterIP # to make our pod accessible to other pods we use ClusterIP service
+  selector:
+    component: web
+  ports:
+    - port: 3000 # port that others pods will use to communicate with the current pod
+      targetPort: 3000 # Port at which the current port is available for traffic
