@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations: # annoatation is an additional config options that mentions hihgher level config of the ingress object
+    kubernetes.io/ingress.class: 'nginx' # this tells kubernetes that we want to create ingress controller based on the nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingess.kubernetes.io/retwrite-target: /$1 # this configures how the actual copy of nginx behaves
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /(.*)
+            pathType: Prefix
+            backend:  
+              service:
+                name: client-cluster-ip-service
+                port: 
+                  number: 3000
+          - path: /api/?(.*)
+            pathType: Prefix
+            backend: 
+              service:
+                name: server-cluster-ip-service
+                port: 
+                  number: 5000
